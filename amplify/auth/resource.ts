@@ -1,11 +1,18 @@
-import { defineAuth } from '@aws-amplify/backend';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Authenticator } from '@aws-amplify/ui-react';
+import { Amplify } from 'aws-amplify';
+import App from './App.tsx';
+import outputs from '../amplify_outputs.json';
+import './index.css';
+import '@aws-amplify/ui-react/styles.css';
 
-/**
- * Define and configure your auth resource
- * @see https://docs.amplify.aws/gen2/build-a-backend/auth
- */
-export const auth = defineAuth({
-  loginWith: {
-    email: true,
-  },
-});
+Amplify.configure(outputs);
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <Authenticator>
+      <App />
+    </Authenticator>
+  </React.StrictMode>
+);
