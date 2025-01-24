@@ -1,20 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Authenticator } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
-import App from './App';
-import outputs from '../amplify_outputs.json';
-import './index.css';
-import '@aws-amplify/ui-react/styles.css';
+import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
-// Configure Amplify
-Amplify.configure(outputs);
+const schema = a.schema({
+  Todo: a.model({
+    content: a.string(),
+  }).authorization(allow => [allow.owner()]),
+});
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Authenticator>
-      <App />
-    </Authenticator>
-  </React.StrictMode>
-);
+export type Schema = ClientSchema<typeof schema>;
+
+export const data = defineData({
+  schema,
+  authorizationModes: {
+    // This tells the data client in your app (generateClient())
+    // to sign API requests with the user authentication token.
+    defaultAuthorizationMode: 'userPool',
+  },
+});
 
